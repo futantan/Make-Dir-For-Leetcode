@@ -144,7 +144,7 @@ class LeetcodeThread(threading.Thread):
             return
 
         mdContent = getMarkDownOfQuestionContentFromUlr(result['problemUrl'])
-        writeContentToFile(mdContent, result['dirPath'] + "/" + "README.MD")
+        writeContentToFile(mdContent, result['dirPath'] + "/" + "README.md")
 
 
 if __name__ == "__main__":
