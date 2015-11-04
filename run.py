@@ -5,6 +5,7 @@ import bs4
 import os
 import threading
 import time
+import sys
 
 markdownFormat = u"""\
 # %(title)s
@@ -84,6 +85,17 @@ def getSequenceNumWithProblemNameFromTr(tr, replaceSpaceWithUnderLine=True):
             'dirPath': '' if isProblemLocked else dirPath}
 
 
+def configBaseDirPath():
+    global baseDir
+    count = len(sys.argv)
+    if count == 1:
+        return
+    if count > 2:
+        print 'please check the directory path'
+    else:
+        baseDir = sys.argv[1]
+
+
 def makeThreadToMakeDir(url):
     response = requests.get(url)
     soup = bs4.BeautifulSoup(response.text)
@@ -132,4 +144,6 @@ class LeetcodeThread(threading.Thread):
 
 
 if __name__ == "__main__":
-    makeThreadToMakeDir(algorithmsListUrl)
+    # makeThreadToMakeDir(algorithmsListUrl)
+    configBaseDirPath()
+    print baseDir
