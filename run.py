@@ -24,16 +24,18 @@ baseDir = "./"
 repoReadMeContent = "|Problem|Completed|\n| - | - |\n"
 
 
-def mkdir(path):
+def mkdir(path, withPrint=True):
     path = path.strip()
     isExists = os.path.exists(path)
 
     if not isExists:
-        print "making dir " + path + "..."
-        os.makedirs(path)
+        if withPrint:
+            print "making dir " + path + "..."
+        os.mkdir(path)
         return True
     else:
-        print '! ' + path + " already exist"
+        if withPrint:
+            print '! ' + path + " already exist"
         return False
 
 
@@ -77,7 +79,7 @@ def getSequenceNumWithProblemNameFromTr(tr, replaceSpaceWithUnderLine=True):
     problemUrl = baseUrl + a['href']
     placeholder = '_' if replaceSpaceWithUnderLine else ' '
     sequenceNumWithProblemName = sequenceNum.rjust(3, '0') + placeholder + problemName.replace(' ', placeholder)
-    dirPath = baseDir + sequenceNumWithProblemName
+    dirPath = os.path.join(baseDir, sequenceNumWithProblemName)
 
     isProblemLocked = tds[2].find("i") is not None
     return {'problemUrl': problemUrl,
@@ -94,15 +96,20 @@ def configBaseDirPath():
         print 'please check the directory path'
     else:
         baseDir = sys.argv[1]
+        mkdir(baseDir, withPrint=False)
 
 
 def makeThreadToMakeDir(url):
+    if not os.path.isdir(baseDir):
+        return
+
     response = requests.get(url)
     soup = bs4.BeautifulSoup(response.text)
     problemList = soup.find(id="problemListRow").table.tbody
     trs = reversed(problemList.find_all("tr"))
     # totalCount = len(trs)
     global repoReadMeContent
+
     for tr in trs:
         result = getSequenceNumWithProblemNameFromTr(tr, False)
         if result['dirPath'] == '':
@@ -113,11 +120,11 @@ def makeThreadToMakeDir(url):
                 'dirPath': result['dirPath']
             }
             repoReadMeContent += line
-    writeContentToFile(repoReadMeContent, baseDir + 'README.md')
 
-    for tr in trs:
-        LeetcodeThread(tr).start()
-        time.sleep(0.1)  # if request too fast, will get an error which says "Connection reset by peer"
+            LeetcodeThread(tr).start()
+            time.sleep(0.1)  # if request too fast, will get an error which says "Connection reset by peer"
+
+    writeContentToFile(repoReadMeContent, os.path.join(baseDir, 'README.md'))
 
 
 class LeetcodeThread(threading.Thread):
@@ -132,9 +139,6 @@ class LeetcodeThread(threading.Thread):
         # (problemUrl, sequenceNumWithProblemName, dirPath) = getSequenceNumWithProblemNameFromTr(self.tr)
         result = getSequenceNumWithProblemNameFromTr(self.tr)
 
-        if result['dirPath'] == '':
-            return
-
         isMkdirSucceed = mkdir(result['dirPath'])
         if not isMkdirSucceed:
             return
@@ -144,6 +148,5 @@ class LeetcodeThread(threading.Thread):
 
 
 if __name__ == "__main__":
-    # makeThreadToMakeDir(algorithmsListUrl)
     configBaseDirPath()
-    print baseDir
+    makeThreadToMakeDir(algorithmsListUrl)
