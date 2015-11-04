@@ -4,6 +4,7 @@ import requests
 import bs4
 import os
 import threading
+import time
 
 markdownFormat = u"""\
 # %(title)s
@@ -19,6 +20,7 @@ markdownFormat = u"""\
 algorithmsListUrl = "https://leetcode.com/problemset/algorithms/"
 baseUrl = "https://leetcode.com"
 baseDir = "./"
+repoReadMeContent = "|Problem|Completed|\n| - | - |\n"
 
 
 def mkdir(path):
@@ -28,8 +30,10 @@ def mkdir(path):
     if not isExists:
         print "making dir " + path + "..."
         os.makedirs(path)
+        return True
     else:
         print '! ' + path + " already exist"
+        return False
 
 
 def writeContentToFile(content, pathToFile):
@@ -44,7 +48,7 @@ def getMarkDownOfQuestionContentFromUlr(questionUrl):
     # the title of this question
     questionTitle = content.find("div", class_="question-title").h3.string
     # the difficulty of this question
-    questionDifficulty = "Difficulty: " + content.find("div", class_="row col-md-12").find_all("span")[2].strong.string
+    # questionDifficulty = "Difficulty: " + content.find("div", class_="row col-md-12").find_all("span")[2].strong.string
 
     questionContentTag = content.find_all("div", class_="row")[1].div.div.find_all("p", recursive=False)
     questionContent = soup.new_tag('div')
@@ -64,14 +68,44 @@ def getMarkDownOfQuestionContentFromUlr(questionUrl):
     return markdown
 
 
-def makeThreadToMakeDir(baseUrl):
-    response = requests.get(baseUrl)
+def getSequenceNumWithProblemNameFromTr(tr, replaceSpaceWithUnderLine=True):
+    tds = tr.find_all("td")
+    sequenceNum = tds[1].string
+    a = tds[2].a  # content
+    problemName = a.string
+    problemUrl = baseUrl + a['href']
+    placeholder = '_' if replaceSpaceWithUnderLine else ' '
+    sequenceNumWithProblemName = sequenceNum.rjust(3, '0') + placeholder + problemName.replace(' ', placeholder)
+    dirPath = baseDir + sequenceNumWithProblemName
+
+    isProblemLocked = tds[2].find("i") is not None
+    return {'problemUrl': problemUrl,
+            'sequenceNumWithProblemName': sequenceNumWithProblemName,
+            'dirPath': '' if isProblemLocked else dirPath}
+
+
+def makeThreadToMakeDir(url):
+    response = requests.get(url)
     soup = bs4.BeautifulSoup(response.text)
     problemList = soup.find(id="problemListRow").table.tbody
-    trs = problemList.find_all("tr")
+    trs = reversed(problemList.find_all("tr"))
     # totalCount = len(trs)
+    global repoReadMeContent
+    for tr in trs:
+        result = getSequenceNumWithProblemNameFromTr(tr, False)
+        if result['dirPath'] == '':
+            continue
+        else:
+            line = "|[%(sequenceNumWithProblemName)s](%(dirPath)s)| |\n" % {
+                'sequenceNumWithProblemName': result['sequenceNumWithProblemName'],
+                'dirPath': result['dirPath']
+            }
+            repoReadMeContent += line
+    writeContentToFile(repoReadMeContent, baseDir + 'README.md')
+
     for tr in trs:
         LeetcodeThread(tr).start()
+        time.sleep(0.1)  # if request too fast, will get an error which says "Connection reset by peer"
 
 
 class LeetcodeThread(threading.Thread):
@@ -83,16 +117,18 @@ class LeetcodeThread(threading.Thread):
         self.makeDirWithProblemTrTag()
 
     def makeDirWithProblemTrTag(self):
-        tds = self.tr.find_all("td")
-        sequenceNum = tds[1].string
-        a = tds[2].a
-        problemName = a.string
-        problemUrl = baseUrl + a['href']
-        dirName = sequenceNum.rjust(3, '0') + '_' + problemName.replace(' ', '_')
-        dirPath = baseDir + dirName
-        mkdir(dirPath)
-        mdContent = getMarkDownOfQuestionContentFromUlr(problemUrl)
-        writeContentToFile(mdContent, dirPath + "/" + "README.MD")
+        # (problemUrl, sequenceNumWithProblemName, dirPath) = getSequenceNumWithProblemNameFromTr(self.tr)
+        result = getSequenceNumWithProblemNameFromTr(self.tr)
+
+        if result['dirPath'] == '':
+            return
+
+        isMkdirSucceed = mkdir(result['dirPath'])
+        if not isMkdirSucceed:
+            return
+
+        mdContent = getMarkDownOfQuestionContentFromUlr(result['problemUrl'])
+        writeContentToFile(mdContent, result['dirPath'] + "/" + "README.MD")
 
 
 if __name__ == "__main__":
