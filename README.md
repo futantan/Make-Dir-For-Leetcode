@@ -16,7 +16,7 @@ It might not suitable for you if you only want to read it on your own computer b
 That's easy.
 
 ```
-https://github.com/futantan/Make-Dir-For-Leetcode.git
+git clone https://github.com/futantan/Make-Dir-For-Leetcode.git
 pip install requests BeautifulSoup4
 python run.py pathToDirectoryYouWant
 ```
@@ -44,7 +44,7 @@ README(Chinese)
 安装非常简单
 
 ```
-https://github.com/futantan/Make-Dir-For-Leetcode.git
+git clone https://github.com/futantan/Make-Dir-For-Leetcode.git
 pip install requests BeautifulSoup4
 python run.py pathToDirectoryYouWant
 ```
