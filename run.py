@@ -21,7 +21,8 @@ markdownFormat = u"""\
 algorithmsListUrl = "https://leetcode.com/problemset/algorithms/"
 baseUrl = "https://leetcode.com"
 baseDir = "./"
-repoReadMeContent = "|Problem|Completed|\n| - | - |\n"
+leetcodeDir = baseDir
+repoReadMeContent = "|Problem|Completed|\n| --- | --- |\n"
 
 
 def mkdir(path, withPrint=True):
@@ -31,7 +32,7 @@ def mkdir(path, withPrint=True):
     if not isExists:
         if withPrint:
             print "making dir " + path + "..."
-        os.mkdir(path)
+        os.makedirs(path)
         return True
     else:
         if withPrint:
@@ -79,16 +80,16 @@ def getSequenceNumWithProblemNameFromTr(tr, replaceSpaceWithUnderLine=True):
     problemUrl = baseUrl + a['href']
     placeholder = '_' if replaceSpaceWithUnderLine else ' '
     sequenceNumWithProblemName = sequenceNum.rjust(3, '0') + placeholder + problemName.replace(' ', placeholder)
-    dirPath = os.path.join(baseDir, sequenceNumWithProblemName)
 
     isProblemLocked = tds[2].find("i") is not None
     return {'problemUrl': problemUrl,
             'sequenceNumWithProblemName': sequenceNumWithProblemName,
-            'dirPath': '' if isProblemLocked else dirPath}
+            'dirPath': '' if isProblemLocked else os.path.join(leetcodeDir, sequenceNumWithProblemName),
+            'relativePath': sequenceNumWithProblemName}
 
 
 def configBaseDirPath():
-    global baseDir
+    global baseDir, leetcodeDir
     count = len(sys.argv)
     if count == 1:
         return
@@ -96,11 +97,12 @@ def configBaseDirPath():
         print 'please check the directory path'
     else:
         baseDir = sys.argv[1]
-        mkdir(baseDir, withPrint=False)
+        leetcodeDir = os.path.join(baseDir, 'LeetCode')
+        mkdir(leetcodeDir, withPrint=False)
 
 
 def makeThreadToMakeDir(url):
-    if not os.path.isdir(baseDir):
+    if not os.path.isdir(leetcodeDir):
         return
 
     response = requests.get(url)
@@ -111,13 +113,13 @@ def makeThreadToMakeDir(url):
     global repoReadMeContent
 
     for tr in trs:
-        result = getSequenceNumWithProblemNameFromTr(tr, False)
+        result = getSequenceNumWithProblemNameFromTr(tr, True)
         if result['dirPath'] == '':
             continue
         else:
-            line = "|[%(sequenceNumWithProblemName)s](%(dirPath)s)| |\n" % {
+            line = "|[%(sequenceNumWithProblemName)s](%(relativePath)s)| |\n" % {
                 'sequenceNumWithProblemName': result['sequenceNumWithProblemName'],
-                'dirPath': result['dirPath']
+                'relativePath': 'LeetCode/' + result['relativePath']
             }
             repoReadMeContent += line
 
@@ -136,7 +138,6 @@ class LeetcodeThread(threading.Thread):
         self.makeDirWithProblemTrTag()
 
     def makeDirWithProblemTrTag(self):
-        # (problemUrl, sequenceNumWithProblemName, dirPath) = getSequenceNumWithProblemNameFromTr(self.tr)
         result = getSequenceNumWithProblemNameFromTr(self.tr)
 
         isMkdirSucceed = mkdir(result['dirPath'])
