@@ -57,8 +57,13 @@ def getMarkDownOfQuestionContentFromUlr(questionUrl):
     # questionDifficulty = "Difficulty: " + content.find("div", class_="row col-md-12").find_all("span")[2].strong.string
 
     questionContentTag = content.find("div", class_="question-content")
-    for tag in questionContentTag.find_all('div'):
-        tag.replaceWith('')
+    # delete 'click to show', 'show tags', 'show similar problems'
+    for tag in questionContentTag.find_all(['p', 'div'], recursive=False):
+        if tag.name == 'p' and 'class' in tag.attrs and 'showspoilers' in tag['class']:
+            tag.replaceWith('')
+        if tag.name == 'div' and 'class' not in tag.attrs:
+            tag.replaceWith('')
+
     questionContent = questionContentTag.prettify()
 
     markdown = markdownFormat % {
