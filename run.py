@@ -56,14 +56,10 @@ def getMarkDownOfQuestionContentFromUlr(questionUrl):
     # the difficulty of this question
     # questionDifficulty = "Difficulty: " + content.find("div", class_="row col-md-12").find_all("span")[2].strong.string
 
-    questionContentTag = content.find_all("div", class_="row")[1].div.div.find_all("p", recursive=False)
-    questionContent = soup.new_tag('div')
-
-    for index in range(len(questionContentTag)):
-        questionContent.insert(index, questionContentTag[index])
-
-    # the content of this question
-    questionContent = questionContent.prettify()
+    questionContentTag = content.find("div", class_="question-content")
+    for tag in questionContentTag.find_all('div'):
+        tag.replaceWith('')
+    questionContent = questionContentTag.prettify()
 
     markdown = markdownFormat % {
         'title': questionTitle,
