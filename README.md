@@ -14,7 +14,7 @@ This script will ccreate a folder for Leetcode, in each subfolder there will be 
 
 ## Who
 
-If you'd like to use Leetcode to practice you algorithms skils and willing to share your code with others on github, this is right for you!
+If you'd like to use Leetcode to practice you algorithms skills and willing to share your code with others on github, this is right for you!
 
 It might not suitable for you if you only want to read it on your own computer because the `README.md` file contains html code which is hard to read, but if you can convert it to mardwon and preview it, it will be nice too.
 
