@@ -2,7 +2,7 @@ Make-Dir-For-Leetcode
 =====================
 ## Demo
 
-[Make-Dir-For-Leetcode-Demo](https://github.com/futantan/Make-Dir-For-LeetCode-Demo)
+[Dir-For-Leetcode](https://github.com/futantan/Dir-For-LeetCode)
 
 ![](/img/image1.png)
 
