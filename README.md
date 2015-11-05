@@ -30,6 +30,10 @@ python run.py pathToDirectoryYouWant
 
 Notice that you can add the path you like behind the comman, if not, it will create in current folder.
 
+## Trick
+
+If you do not have the python environment you can just fork the [Dir-For-Leetcode](https://github.com/futantan/Dir-For-LeetCode) repository as you need.
+
 enjoy~
 
 ---
@@ -57,3 +61,7 @@ python run.py pathToDirectoryYouWant
 ```
 
 `python run.py` 后可跟一个表示文件夹路径的参数，如果没有，默认为当前目录。
+
+## 嗯。。。
+
+如果你懒得跑代码的话，直接fork [Dir-For-Leetcode](https://github.com/futantan/Dir-For-LeetCode) 项目也是可以的
