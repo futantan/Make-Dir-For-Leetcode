@@ -37,6 +37,7 @@ If you do not have the python environment you can just fork the [Dir-For-Leetcod
 enjoy~
 
 ---
+<a name="readmechinese"></a>
 README(Chinese)
 ===============
 
