@@ -1,5 +1,14 @@
 Make-Dir-For-Leetcode
 =====================
+## Demo
+
+[Make-Dir-For-Leetcode-Demo](https://github.com/futantan/Make-Dir-For-LeetCode-Demo)
+
+![](/img/demo1.png)
+
+![](/img/demo2.png)
+
+![](/img/demo3.png)
 
 ## What
 
@@ -7,7 +16,7 @@ This script will ccreate a folder for Leetcode, in each subfolder there will be 
 
 ## Who
 
-If you'd like to use Leetcode to practice you algorithms skils and willing to share your code with others on github, this is right for you! 
+If you'd like to use Leetcode to practice you algorithms skils and willing to share your code with others on github, this is right for you!
 
 It might not suitable for you if you only want to read it on your own computer because the `README.md` file contains html code which is hard to read, but if you can convert it to mardwon and preview it, it will be nice too.
 
@@ -50,5 +59,3 @@ python run.py pathToDirectoryYouWant
 ```
 
 `python run.py` 后可跟一个表示文件夹路径的参数，如果没有，默认为当前目录。
-
-
