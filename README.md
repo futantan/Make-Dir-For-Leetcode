@@ -1,4 +1,4 @@
-Make-Dir-For-Leetcode
+Make-Dir-For-Leetcode [中文](#readmechinese)
 =====================
 ## Demo
 
