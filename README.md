@@ -4,9 +4,9 @@ Make-Dir-For-Leetcode
 
 [Make-Dir-For-Leetcode-Demo](https://github.com/futantan/Make-Dir-For-LeetCode-Demo)
 
-![](/img/demo1.png)
+![](/img/image1.png)
 
-![](/img/demo2.png)
+![](/img/image2.png)
 
 ## What
 
