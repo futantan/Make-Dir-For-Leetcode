@@ -8,8 +8,6 @@ Make-Dir-For-Leetcode
 
 ![](/img/demo2.png)
 
-![](/img/demo3.png)
-
 ## What
 
 This script will ccreate a folder for Leetcode, in each subfolder there will be a file named `README.md`, the content of this file will be the corresponding problem contet of Leetcode.
