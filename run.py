@@ -7,6 +7,7 @@ import threading
 import time
 import sys
 
+# content of readme corresponding to the folder
 markdownFormat = u"""\
 # %(title)s
 
@@ -22,6 +23,7 @@ algorithmsListUrl = "https://leetcode.com/problemset/algorithms/"
 baseUrl = "https://leetcode.com"
 baseDir = "./"
 leetcodeDir = baseDir
+# readme of the project
 repoReadMeContent = "|Problem|Completed|\n| --- | --- |\n"
 
 
