@@ -10,13 +10,13 @@ Make-Dir-For-Leetcode [中文](#readmechinese)
 
 ## What
 
-This script will ccreate a folder for Leetcode, in each subfolder there will be a file named `README.md`, the content of this file will be the corresponding problem contet of Leetcode.
+This script will create a folder for LeetCode, in each subfolder there will be a file named `README.md`, the content of this file will be the corresponding problem content of LeetCode.
 
 ## Who
 
-If you'd like to use Leetcode to practice you algorithms skills and willing to share your code with others on github, this is right for you!
+If you'd like to use LeetCode to practice you algorithms skills and willing to share your code with others on github, this is right for you!
 
-It might not suitable for you if you only want to read it on your own computer because the `README.md` file contains html code which is hard to read, but if you can convert it to mardwon and preview it, it will be nice too.
+It might not suitable for you if you only want to read it on your own computer because the `README.md` file contains html code which is hard to read, but if you can convert it to markdown and preview it, it will be nice too.
 
 ## Setup
 
@@ -28,7 +28,7 @@ pip install requests BeautifulSoup4
 python run.py pathToDirectoryYouWant
 ```
 
-Notice that you can add the path you like behind the comman, if not, it will create in current folder.
+Notice that you can add the path you like behind the command, if not, it will be created in current folder.
 
 ## Trick
 
